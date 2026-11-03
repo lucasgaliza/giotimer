@@ -45,72 +45,10 @@
     text-rendering:optimizeLegibility;
   }
 
-  /* ============ BARRA DE TESTE (SÓ ESTA VERSÃO) ============ */
-  .testbar{
-    width:min(620px,100%);
-    margin:0 auto 14px;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:6px;
-    padding:10px 12px;
-    border:1px dashed rgba(142,168,255,.38);
-    border-radius:14px;
-    background:rgba(77,107,254,.08);
-    animation:cardIn .45s cubic-bezier(.2,.8,.3,1) both;
-  }
-
-  .testbar-label{
-    font-size:11.5px;
-    font-weight:700;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--blue-soft);
-    margin-right:4px;
-    white-space:nowrap;
-  }
-
-  .tb-btn{
-    padding:6px 10px;
-    font-family:inherit;
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--muted);
-    background:#1a2029;
-    border:1px solid var(--border);
-    border-radius:8px;
-    cursor:pointer;
-    transition:background .15s, color .15s, border-color .15s, box-shadow .15s;
-  }
-  .tb-btn:hover{ color:var(--text); border-color:#3a4655; }
-  .tb-btn.active{
-    color:#fff;
-    background:rgba(77,107,254,.55);
-    border-color:rgba(77,107,254,.9);
-    box-shadow:0 0 16px -5px rgba(77,107,254,.95);
-  }
-  .tb-btn.weekend.active{
-    background:rgba(255,122,184,.50);
-    border-color:rgba(255,122,184,.9);
-    box-shadow:0 0 16px -5px rgba(255,122,184,.95);
-  }
-
-  .testbar-status{
-    margin-left:auto;
-    font-size:11.5px;
-    font-weight:600;
-    letter-spacing:.03em;
-    color:var(--muted);
-    white-space:nowrap;
-  }
-  .testbar-status.weekend{ color:var(--pink); }
-  .testbar-status.friday{ color:var(--gold); }
-
-  /* ---------- CARD ---------- */
   .card{
     margin:auto;
-    width:min(620px,100%);
-    padding:clamp(20px,5.2vw,34px);
+    width:min(960px,100%);
+    padding:clamp(20px,5.2vw,40px);
     border:1px solid var(--border);
     border-radius:22px;
     background:linear-gradient(180deg, rgba(29,36,45,.96), rgba(21,26,33,.97));
@@ -153,7 +91,7 @@
     margin:0 0 8px;
     font-family:'Sora','Inter',sans-serif;
     font-weight:700;
-    font-size:clamp(1.45rem,5.4vw,2rem);
+    font-size:clamp(1.45rem,5.4vw,2.2rem);
     line-height:1.18;
     letter-spacing:-.02em;
     background:linear-gradient(100deg,#ffffff 0%,#cdd9ff 45%,#6f8cff 100%);
@@ -169,7 +107,6 @@
     color:var(--muted);
   }
 
-  /* ---------- INPUT + RELÓGIO ---------- */
   .timewrap{ position:relative; display:flex; align-items:center; }
 
   #entrada{
@@ -215,7 +152,6 @@
   }
   .clock-btn svg{ width:19px;height:19px; }
 
-  /* ---------- PICKER ---------- */
   .picker{
     position:absolute;
     z-index:30;
@@ -311,7 +247,6 @@
   }
   #okBtn:hover{ filter:brightness(1.08); }
 
-  /* ---------- HINT ---------- */
   .hint{
     margin:12px 2px 0;
     font-size:13px;
@@ -319,8 +254,8 @@
     color:var(--muted);
   }
   .hint b{ color:var(--blue-soft); font-weight:600; }
+  .hint[hidden] { display: none; }
 
-  /* ---------- BOTÃO PRINCIPAL ---------- */
   .primary-btn{
     width:100%;
     margin-top:14px;
@@ -346,7 +281,6 @@
     cursor:not-allowed;
   }
 
-  /* ---------- AVISO ---------- */
   .warn{
     display:flex;
     align-items:center;
@@ -359,7 +293,6 @@
   }
   .warn[hidden]{ display:none; }
 
-  /* ---------- RESULTADO ---------- */
   .result-box{
     margin-top:18px;
     padding:18px;
@@ -387,39 +320,58 @@
   }
   .result-box.friday b{ color:var(--gold); }
 
-  /* ---------- CARD DO GATO ---------- */
   .cat-card{
-    margin-top:18px;
-    padding:14px;
+    margin-top:24px;
+    padding:18px;
     border:1px solid var(--border);
     border-radius:18px;
     background:linear-gradient(180deg, rgba(29,36,45,.72), rgba(21,26,33,.82));
     animation:pop .3s ease both;
   }
 
-  .frame{
-    padding:10px;
-    border-radius:14px;
-    background:linear-gradient(150deg,#3b4553 0%,#232a33 48%,#161b22 100%);
+  .frame {
+    padding: 12px;
+    background: #2d1e16;
+    border: 4px solid #b88a44;
+    border-radius: 4px;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,.07) inset,
-      0 0 0 1px rgba(0,0,0,.6),
-      0 18px 38px -22px rgba(0,0,0,.95);
+      0 0 0 2px #110a06,
+      inset 0 0 0 2px #110a06,
+      inset 0 0 20px rgba(0,0,0,0.9),
+      0 20px 40px -15px rgba(0,0,0,0.95);
+    position: relative;
   }
-  .frame img{
-    display:block;
-    width:100%;
-    aspect-ratio:4 / 3;
-    object-fit:cover;
-    object-position:center;
-    border-radius:6px;
-    background:#0d1015;
-    box-shadow:0 0 0 1px rgba(0,0,0,.65), 0 2px 10px rgba(0,0,0,.5) inset;
+  
+  .frame-inner {
+    padding: 10px;
+    background: #f4f1e1;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  .frame img.loading{ opacity:.35; transition:opacity .25s; }
+
+  .frame-inner::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  .frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center;
+    border: 2px solid #111;
+  }
 
   .cat-message{
-    margin:12px 0 0;
+    margin:16px 0 0;
     text-align:center;
     font-size:14px;
     font-weight:500;
@@ -427,9 +379,8 @@
     color:var(--blue-soft);
   }
 
-  /* ---------- FIM DE SEMANA ---------- */
   .weekend{
-    margin-top:20px;
+    margin-top:8px;
     padding:18px;
     border:1px solid rgba(255,122,184,.30);
     border-radius:18px;
@@ -463,38 +414,49 @@
     color:#d4dcea;
   }
 
-  .weekend .weekend-note{
-    margin:0 0 14px;
-    font-size:12px;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    text-align:center;
-    color:var(--muted);
-  }
-
   .gallery{
     display:grid;
-    grid-template-columns:repeat(12,minmax(0,1fr));
-    gap:clamp(2px,.55vw,5px);
-    padding:8px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(10px,2vw,16px);
+    padding:12px;
     border-radius:14px;
     background:rgba(0,0,0,.20);
     box-shadow:0 0 0 1px rgba(255,255,255,.06) inset;
   }
 
+  .grid-frame {
+    padding: 6px;
+    background: #2d1e16;
+    border: 3px solid #b88a44;
+    border-radius: 2px;
+    box-shadow:
+      0 0 0 1px #110a06,
+      inset 0 0 0 1px #110a06,
+      inset 0 0 10px rgba(0,0,0,0.8),
+      0 8px 15px -5px rgba(0,0,0,0.8);
+    aspect-ratio: 1 / 1;
+  }
+
+  .grid-frame-inner {
+    padding: 4px;
+    background: #f4f1e1;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
   .gallery img{
     display:block;
     width:100%;
-    min-width:0;
-    aspect-ratio:1 / 1;
+    height: 100%;
     object-fit:cover;
-    border-radius:4px;
-    background:#0d1015;
-    border:1px solid rgba(255,255,255,.07);
-    box-shadow:0 2px 6px rgba(0,0,0,.35);
+    object-position:center;
+    border: 1px solid #111;
   }
 
-  /* ---------- CONFETES ---------- */
   .confetti-layer{
     position:fixed;
     inset:0;
@@ -516,13 +478,13 @@
     100%{ transform:translateY(-115vh) rotate(340deg) scale(1.1); opacity:0; }
   }
 
-  /* ---------- MOBILE ---------- */
-  @media (max-width:420px){
+  @media (max-width:520px){
     .picker{ width:100%; right:0; left:0; }
     .col{ height:150px; }
     .result-box p{ font-size:15px; }
-    .gallery{ gap:2px; padding:5px; }
-    .testbar-status{ margin-left:0; width:100%; }
+    .gallery{ gap:8px; padding:6px; }
+    .frame-inner { padding: 6px; }
+    .frame img { aspect-ratio:4/3; }
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -532,84 +494,73 @@
 </head>
 <body>
 
-  <!-- ===== BARRA DE TESTE (remova este bloco na versão final) ===== -->
-  <div class="testbar" role="group" aria-label="Simulador de dia da semana">
-    <span class="testbar-label">🧪 Teste</span>
-    <button type="button" class="tb-btn active" data-day="auto" aria-pressed="true">Auto</button>
-    <button type="button" class="tb-btn" data-day="1" aria-pressed="false">Seg</button>
-    <button type="button" class="tb-btn" data-day="2" aria-pressed="false">Ter</button>
-    <button type="button" class="tb-btn" data-day="3" aria-pressed="false">Qua</button>
-    <button type="button" class="tb-btn" data-day="4" aria-pressed="false">Qui</button>
-    <button type="button" class="tb-btn" data-day="5" aria-pressed="false">Sex</button>
-    <button type="button" class="tb-btn weekend" data-day="6" aria-pressed="false">Sáb</button>
-    <button type="button" class="tb-btn weekend" data-day="0" aria-pressed="false">Dom</button>
-    <span id="testStatus" class="testbar-status">dia real</span>
-  </div>
-
   <main class="card">
-    <span class="eyebrow"><span class="dot"></span> Horário de Saída</span>
+    <div id="normalUI">
+      <span class="eyebrow"><span class="dot"></span> Horário de Saída</span>
 
-    <h1>Olá, bela dama Giovanna!</h1>
-    <p class="sub">Me diga que horas você entrou hoje e eu calculo certinho o horário de ir embora. 💙</p>
+      <h1>Olá, bela dama Giovanna!</h1>
+      <p class="sub">Ajuste abaixo o horário que você entrou hoje e eu calculo certinho o horário de ir embora. 💙</p>
 
-    <div class="timewrap">
-      <input
-        id="entrada"
-        type="text"
-        inputmode="numeric"
-        autocomplete="off"
-        spellcheck="false"
-        aria-label="Horário de entrada"
-        placeholder="HH:MM ou HHMM"
-      />
+      <div class="timewrap">
+        <input
+          id="entrada"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Horário de entrada"
+          placeholder="HH:MM ou HHMM"
+        />
 
-      <button id="clockBtn" class="clock-btn" type="button"
-              aria-label="Escolher horário no relógio" aria-expanded="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"></circle>
-          <path d="M12 7.2V12l3.3 2"></path>
-        </svg>
-      </button>
+        <button id="clockBtn" class="clock-btn" type="button"
+                aria-label="Escolher horário no relógio" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 7.2V12l3.3 2"></path>
+          </svg>
+        </button>
 
-      <div id="picker" class="picker" hidden role="dialog" aria-label="Seletor de horário">
-        <div class="picker-head">
-          <span>Horário</span>
-          <strong id="pickerPreview">08:00</strong>
-        </div>
-        <div class="picker-cols">
-          <div class="col" id="colH" aria-label="Horas"></div>
-          <div class="col" id="colM" aria-label="Minutos"></div>
-        </div>
-        <div class="picker-actions">
-          <button type="button" id="nowBtn">Agora</button>
-          <button type="button" id="okBtn">Usar</button>
+        <div id="picker" class="picker" hidden role="dialog" aria-label="Seletor de horário">
+          <div class="picker-head">
+            <span>Horário</span>
+            <strong id="pickerPreview">08:00</strong>
+          </div>
+          <div class="picker-cols">
+            <div class="col" id="colH" aria-label="Horas"></div>
+            <div class="col" id="colM" aria-label="Minutos"></div>
+          </div>
+          <div class="picker-actions">
+            <button type="button" id="nowBtn">Agora</button>
+            <button type="button" id="okBtn">Usar</button>
+          </div>
         </div>
       </div>
+
+      <p id="hint" class="hint"></p>
+
+      <button id="calcBtn" class="primary-btn" type="button" disabled>Calcular Saída</button>
+
+      <p id="warn" class="warn" hidden>⏰ Eita, entrou tarde hein?</p>
+
+      <section id="result" class="result-box" hidden aria-live="polite">
+        <p id="resultText"></p>
+      </section>
+
+      <section id="catCard" class="cat-card">
+        <div class="frame">
+          <div class="frame-inner">
+            <img id="catImg" alt="Gato aleatório fofo" />
+          </div>
+        </div>
+        <p class="cat-message">Toma um gatinho pra te animar!</p>
+      </section>
     </div>
-
-    <p id="hint" class="hint"></p>
-
-    <button id="calcBtn" class="primary-btn" type="button" disabled>Calcular Saída</button>
-
-    <p id="warn" class="warn" hidden>⏰ Eita, entrou tarde hein?</p>
-
-    <section id="result" class="result-box" hidden aria-live="polite">
-      <p id="resultText"></p>
-    </section>
-
-    <section id="catCard" class="cat-card">
-      <div class="frame">
-        <img id="catImg" alt="Gato aleatório fofo" />
-      </div>
-      <p class="cat-message">Toma um gatinho pra te animar!</p>
-    </section>
 
     <section id="weekend" class="weekend" hidden aria-live="polite">
       <h2>Final de semana não, porra!</h2>
-      <p class="weekend-sub">Hoje é dia de descansar, Giovanna. Mas olha só essa galeria de gatos pra alegrar o dia. 🐾💙</p>
-      <p class="weekend-note">Galeria 12 × 12 de gatos aleatórios</p>
-      <div id="catGallery" class="gallery" aria-label="Galeria 12 por 12 de gatos aleatórios"></div>
+      <p class="weekend-sub">Hoje é dia de descansar, assistir o episódio 9 de Star Wars, mandar mensagem pro lindo do Galiza e perguntar se pode ir ver a Bebel... De toda forma, olha só essa galeria de gatinhos. 🐾💙</p>
+      <div id="catGallery" class="gallery" aria-label="Galeria de gatinhos aleatórios"></div>
     </section>
   </main>
 
@@ -621,6 +572,7 @@
 
   const $ = (id) => document.getElementById(id);
 
+  const normalUI   = $('normalUI');
   const entrada    = $('entrada');
   const calcBtn    = $('calcBtn');
   const warn       = $('warn');
@@ -638,26 +590,15 @@
   const nowBtn     = $('nowBtn');
   const confetti   = $('confetti');
   const hint       = $('hint');
-  const testStatus = $('testStatus');
 
   const pad = (n) => String(n).padStart(2, '0');
 
-  const DAY_NAMES = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
-
-  /* =========================================================
-     SIMULADOR DE DIA  (apenas para esta versão de teste)
-     testDay = null  -> usa a data real
-     testDay = 0..6  -> força o dia da semana
-     ========================================================= */
-  let testDay = null;
-
   function getDay() {
-    return testDay === null ? new Date().getDay() : testDay;
+    return new Date().getDay();
   }
 
   function isWeekend(day) { return day === 0 || day === 6; }
 
-  /* ---------- Parser ---------- */
   function parseTime(raw) {
     if (!raw) return null;
     const m = String(raw).trim().match(/^(\d{1,2}):?(\d{2})$/);
@@ -674,8 +615,9 @@
   const WORK_FRIDAY = 5 * 60;
   const LUNCH       = 60;
 
-  /* ---------- Hint dinâmico ---------- */
   function buildHint() {
+    hint.hidden = false;
+
     const now = new Date();
     const day = getDay();
     const isFriday = day === 5;
@@ -691,18 +633,16 @@
       'em HH:MM ou HHMM, ou selecione pelo botão do lado da caixinha!';
   }
 
-  /* ---------- Estado ---------- */
   function hideResults() {
     resultBox.hidden = true;
     resultBox.classList.remove('friday');
-    weekendBox.hidden = true;
   }
 
   function updateState() {
     const t = parseTime(entrada.value);
     const valid = t !== null;
     calcBtn.disabled = !valid;
-    warn.hidden = !(valid && t > 11 * 60) || isWeekend(getDay());
+    warn.hidden = !(valid && t > 11 * 60);
   }
 
   entrada.addEventListener('input', function () {
@@ -717,21 +657,13 @@
     }
   });
 
-  /* ---------- Cálculo (isolado para poder ser chamado pelo simulador) ---------- */
   function runCalc() {
     const entry = parseTime(entrada.value);
     if (entry === null) return;
 
+    hint.hidden = true;
+
     const day = getDay();
-
-    if (isWeekend(day)) {
-      resultBox.hidden = true;
-      resultBox.classList.remove('friday');
-      warn.hidden = true;
-      showWeekendGallery();
-      return;
-    }
-
     const isFriday = day === 5;
     const work = isFriday ? WORK_FRIDAY : WORK_NORMAL;
     const exit = (entry + work + LUNCH) % (24 * 60);
@@ -749,7 +681,6 @@
         '<b>' + exitStr + '</b> hoje!';
     }
 
-    weekendBox.hidden = true;
     resultBox.classList.toggle('friday', isFriday);
     resultBox.hidden = false;
 
@@ -763,85 +694,83 @@
 
   calcBtn.addEventListener('click', runCalc);
 
-  /* ---------- Gato do card principal ---------- */
-  function loadCat() {
-    const seed = Date.now() + '-' + Math.floor(Math.random() * 1e6);
-
-    const sources = [
-      'https://placecats.com/600/450?_=' + seed,
-      'https://cataas.com/cat?width=600&height=450&_=' + seed,
-      'https://loremflickr.com/600/450/cat?lock=' + Math.floor(Math.random() * 100000)
-    ];
-
-    let i = 0;
+  async function loadCat() {
     catImg.classList.add('loading');
-
-    catImg.onload = function () {
-      catImg.classList.remove('loading');
-    };
-
-    catImg.onerror = function () {
-      i++;
-      if (i < sources.length) {
-        catImg.src = sources[i];
-      } else {
-        catImg.onerror = null;
-        catImg.classList.remove('loading');
-      }
-    };
-
-    catImg.src = sources[0];
+    try {
+      const response = await fetch('https://api.thecatapi.com/v1/images/search?limit=1&size=med');
+      if (!response.ok) throw new Error('API error');
+      const data = await response.json();
+      catImg.src = data[0].url;
+      catImg.onload = () => catImg.classList.remove('loading');
+    } catch (error) {
+      const unique = Date.now() + Math.random();
+      catImg.src = `https://cataas.com/cat?width=860&height=480&t=${unique}`;
+      catImg.onload = () => catImg.classList.remove('loading');
+      catImg.onerror = () => catImg.classList.remove('loading');
+    }
   }
 
-  /* ---------- Galeria 12x12 ---------- */
-  function buildCatGallery() {
-    catGallery.innerHTML = '';
-
-    const fragment = document.createDocumentFragment();
-    const total = 12 * 12;
-
-    for (let i = 0; i < total; i++) {
-      const img = document.createElement('img');
-      const unique = Date.now() + '-' + i + '-' + Math.random().toString(36).slice(2);
-
-      img.alt = 'Gato aleatório ' + (i + 1);
-      img.loading = 'lazy';
-      img.decoding = 'async';
-
-      const sources = [
-        'https://placecats.com/200/200?_=' + unique,
-        'https://cataas.com/cat?width=200&height=200&_=' + unique,
-        'https://loremflickr.com/200/200/cat?lock=' + Math.floor(Math.random() * 1000000)
-      ];
-
-      let sourceIndex = 0;
-      img.src = sources[sourceIndex];
-
-      img.onerror = function () {
-        sourceIndex++;
-        if (sourceIndex < sources.length) {
-          img.src = sources[sourceIndex];
-        } else {
-          img.onerror = null;
-        }
-      };
-
-      fragment.appendChild(img);
+  async function buildCatGallery() {
+    catGallery.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 20px;">Carregando gatinhos...</div>';
+    
+    let cats = [];
+    try {
+      const response = await fetch('https://api.thecatapi.com/v1/images/search?limit=9&size=med');
+      if (response.ok) {
+        const data = await response.json();
+        cats = data.map(c => c.url);
+      }
+    } catch (e) {
+      console.warn('TheCatAPI falhou, preenchendo com CATAAS.');
     }
 
+    while (cats.length < 9) {
+      const unique = Date.now() + cats.length + Math.random();
+      cats.push(`https://cataas.com/cat?width=300&height=300&t=${unique}`);
+    }
+
+    catGallery.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    
+    cats.slice(0, 9).forEach((url, i) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'grid-frame';
+      const inner = document.createElement('div');
+      inner.className = 'grid-frame-inner';
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Gato ' + (i + 1);
+      img.loading = 'lazy';
+      
+      img.onerror = function() {
+        this.src = `https://cataas.com/cat?width=300&height=300&t=${Date.now() + i}`;
+        this.onerror = null;
+      };
+
+      inner.appendChild(img);
+      wrapper.appendChild(inner);
+      fragment.appendChild(wrapper);
+    });
+    
     catGallery.appendChild(fragment);
   }
 
-  function showWeekendGallery() {
-    buildCatGallery();
-    weekendBox.hidden = false;
+  function updateUIForDay() {
+    const day = getDay();
+    const wknd = isWeekend(day);
 
-    if (weekendBox.getBoundingClientRect().bottom > window.innerHeight) {
-      weekendBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (wknd) {
+      normalUI.hidden = true;
+      weekendBox.hidden = false;
+      buildCatGallery();
+    } else {
+      normalUI.hidden = false;
+      weekendBox.hidden = true;
+      buildHint();
+      updateState();
     }
   }
 
-  /* ---------- Confetes de sexta ---------- */
   function celebrate() {
     const emojis = ['💙', '💖', '✨', '🎉', '🩵', '💫'];
 
@@ -859,7 +788,6 @@
     }
   }
 
-  /* ---------- Picker de horário ---------- */
   let selH = 8;
   let selM = 0;
 
@@ -968,69 +896,15 @@
     entrada.focus();
   });
 
-  /* =========================================================
-     SIMULADOR DE DIA — lógica da barra de teste
-     ========================================================= */
-  const dayButtons = Array.prototype.slice.call(document.querySelectorAll('.tb-btn'));
-
-  function updateTestStatus() {
-    testStatus.classList.remove('weekend', 'friday');
-
-    if (testDay === null) {
-      testStatus.textContent = 'dia real: ' + DAY_NAMES[new Date().getDay()];
-      const d = new Date().getDay();
-      if (isWeekend(d)) testStatus.classList.add('weekend');
-      else if (d === 5) testStatus.classList.add('friday');
-      return;
-    }
-
-    testStatus.textContent = 'simulando: ' + DAY_NAMES[testDay];
-    if (isWeekend(testDay)) testStatus.classList.add('weekend');
-    else if (testDay === 5) testStatus.classList.add('friday');
-  }
-
-  function applyTestDay() {
-    dayButtons.forEach(function (btn) {
-      const v = btn.dataset.day;
-      const active = (v === 'auto' && testDay === null) ||
-                     (v !== 'auto' && Number(v) === testDay);
-      btn.classList.toggle('active', active);
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-
-    updateTestStatus();
-    buildHint();
-    updateState();
-
-    // Se já existe um horário válido, recalcula na hora para o preview ficar correto
-    if (parseTime(entrada.value) !== null) {
-      runCalc();
-    } else {
-      hideResults();
-    }
-  }
-
-  dayButtons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const v = btn.dataset.day;
-      testDay = (v === 'auto') ? null : Number(v);
-      applyTestDay();
-    });
-  });
-
-  /* ---------- Inicialização ---------- */
   (function init() {
     const now = new Date();
     entrada.value = pad(now.getHours()) + ':' + pad(now.getMinutes());
 
-    buildHint();
-    updateState();
-    loadCat();
+    updateUIForDay();
+    if (!isWeekend(getDay())) {
+      loadCat();
+    }
     syncPicker(false);
-    updateTestStatus();
-
-    // Ao abrir, se o dia real for fim de semana, já mostra a galeria
-    if (isWeekend(getDay())) showWeekendGallery();
   })();
 })();
 </script>
