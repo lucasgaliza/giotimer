@@ -33,7 +33,7 @@
     min-height:100dvh;
     display:flex;
     flex-direction:column;
-    padding:clamp(14px,4vw,44px);
+    padding:clamp(12px,3.5vw,40px);
     font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
     color:var(--text);
     background-color:var(--bg);
@@ -44,6 +44,67 @@
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }
+
+  /* ============ BARRA DE TESTE (SÓ ESTA VERSÃO) ============ */
+  .testbar{
+    width:min(620px,100%);
+    margin:0 auto 14px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+    padding:10px 12px;
+    border:1px dashed rgba(142,168,255,.38);
+    border-radius:14px;
+    background:rgba(77,107,254,.08);
+    animation:cardIn .45s cubic-bezier(.2,.8,.3,1) both;
+  }
+
+  .testbar-label{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--blue-soft);
+    margin-right:4px;
+    white-space:nowrap;
+  }
+
+  .tb-btn{
+    padding:6px 10px;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    background:#1a2029;
+    border:1px solid var(--border);
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s, color .15s, border-color .15s, box-shadow .15s;
+  }
+  .tb-btn:hover{ color:var(--text); border-color:#3a4655; }
+  .tb-btn.active{
+    color:#fff;
+    background:rgba(77,107,254,.55);
+    border-color:rgba(77,107,254,.9);
+    box-shadow:0 0 16px -5px rgba(77,107,254,.95);
+  }
+  .tb-btn.weekend.active{
+    background:rgba(255,122,184,.50);
+    border-color:rgba(255,122,184,.9);
+    box-shadow:0 0 16px -5px rgba(255,122,184,.95);
+  }
+
+  .testbar-status{
+    margin-left:auto;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.03em;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .testbar-status.weekend{ color:var(--pink); }
+  .testbar-status.friday{ color:var(--gold); }
 
   /* ---------- CARD ---------- */
   .card{
@@ -102,7 +163,7 @@
   }
 
   .sub{
-    margin:0 0 24px;
+    margin:0 0 22px;
     font-size:14.5px;
     line-height:1.5;
     color:var(--muted);
@@ -250,6 +311,15 @@
   }
   #okBtn:hover{ filter:brightness(1.08); }
 
+  /* ---------- HINT ---------- */
+  .hint{
+    margin:12px 2px 0;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--muted);
+  }
+  .hint b{ color:var(--blue-soft); font-weight:600; }
+
   /* ---------- BOTÃO PRINCIPAL ---------- */
   .primary-btn{
     width:100%;
@@ -290,35 +360,43 @@
   .warn[hidden]{ display:none; }
 
   /* ---------- RESULTADO ---------- */
-  .result{
-    margin-top:20px;
+  .result-box{
+    margin-top:18px;
     padding:18px;
     border:1px solid var(--border);
     border-radius:18px;
     background:rgba(77,107,254,.07);
     animation:pop .3s ease both;
   }
-  .result[hidden]{ display:none; }
-  .result.friday{
+  .result-box[hidden]{ display:none; }
+  .result-box.friday{
     border-color:rgba(255,196,107,.34);
     background:rgba(255,196,107,.06);
     box-shadow:0 0 40px -18px rgba(255,196,107,.55);
   }
-
-  .result p{
-    margin:0 0 16px;
+  .result-box p{
+    margin:0;
     font-size:15.5px;
     line-height:1.6;
     color:#dbe3f0;
   }
-  .result b{
+  .result-box b{
     color:#ffffff;
     font-weight:700;
     font-variant-numeric:tabular-nums;
   }
-  .result.friday b{ color:var(--gold); }
+  .result-box.friday b{ color:var(--gold); }
 
-  /* ---------- QUADRO DO GATO ---------- */
+  /* ---------- CARD DO GATO ---------- */
+  .cat-card{
+    margin-top:18px;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(29,36,45,.72), rgba(21,26,33,.82));
+    animation:pop .3s ease both;
+  }
+
   .frame{
     padding:10px;
     border-radius:14px;
@@ -339,6 +417,15 @@
     box-shadow:0 0 0 1px rgba(0,0,0,.65), 0 2px 10px rgba(0,0,0,.5) inset;
   }
   .frame img.loading{ opacity:.35; transition:opacity .25s; }
+
+  .cat-message{
+    margin:12px 0 0;
+    text-align:center;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:.01em;
+    color:var(--blue-soft);
+  }
 
   /* ---------- FIM DE SEMANA ---------- */
   .weekend{
@@ -433,8 +520,9 @@
   @media (max-width:420px){
     .picker{ width:100%; right:0; left:0; }
     .col{ height:150px; }
-    .result p{ font-size:15px; }
+    .result-box p{ font-size:15px; }
     .gallery{ gap:2px; padding:5px; }
+    .testbar-status{ margin-left:0; width:100%; }
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -444,8 +532,22 @@
 </head>
 <body>
 
+  <!-- ===== BARRA DE TESTE (remova este bloco na versão final) ===== -->
+  <div class="testbar" role="group" aria-label="Simulador de dia da semana">
+    <span class="testbar-label">🧪 Teste</span>
+    <button type="button" class="tb-btn active" data-day="auto" aria-pressed="true">Auto</button>
+    <button type="button" class="tb-btn" data-day="1" aria-pressed="false">Seg</button>
+    <button type="button" class="tb-btn" data-day="2" aria-pressed="false">Ter</button>
+    <button type="button" class="tb-btn" data-day="3" aria-pressed="false">Qua</button>
+    <button type="button" class="tb-btn" data-day="4" aria-pressed="false">Qui</button>
+    <button type="button" class="tb-btn" data-day="5" aria-pressed="false">Sex</button>
+    <button type="button" class="tb-btn weekend" data-day="6" aria-pressed="false">Sáb</button>
+    <button type="button" class="tb-btn weekend" data-day="0" aria-pressed="false">Dom</button>
+    <span id="testStatus" class="testbar-status">dia real</span>
+  </div>
+
   <main class="card">
-    <span class="eyebrow"><span class="dot"></span> Ponto &amp; Saída</span>
+    <span class="eyebrow"><span class="dot"></span> Horário de Saída</span>
 
     <h1>Olá, bela dama Giovanna!</h1>
     <p class="sub">Me diga que horas você entrou hoje e eu calculo certinho o horário de ir embora. 💙</p>
@@ -458,7 +560,7 @@
         autocomplete="off"
         spellcheck="false"
         aria-label="Horário de entrada"
-        placeholder="que horas você entrou hoje? no formato HH:MM, HHMM também serve..."
+        placeholder="HH:MM ou HHMM"
       />
 
       <button id="clockBtn" class="clock-btn" type="button"
@@ -486,15 +588,21 @@
       </div>
     </div>
 
+    <p id="hint" class="hint"></p>
+
     <button id="calcBtn" class="primary-btn" type="button" disabled>Calcular Saída</button>
 
     <p id="warn" class="warn" hidden>⏰ Eita, entrou tarde hein?</p>
 
-    <section id="result" class="result" hidden aria-live="polite">
+    <section id="result" class="result-box" hidden aria-live="polite">
       <p id="resultText"></p>
+    </section>
+
+    <section id="catCard" class="cat-card">
       <div class="frame">
         <img id="catImg" alt="Gato aleatório fofo" />
       </div>
+      <p class="cat-message">Toma um gatinho pra te animar!</p>
     </section>
 
     <section id="weekend" class="weekend" hidden aria-live="polite">
@@ -511,47 +619,80 @@
 (function () {
   'use strict';
 
-  /* ====================== ELEMENTOS ====================== */
   const $ = (id) => document.getElementById(id);
 
-  const entrada     = $('entrada');
-  const calcBtn     = $('calcBtn');
-  const warn        = $('warn');
-  const resultBox   = $('result');
-  const resultText  = $('resultText');
-  const catImg      = $('catImg');
-  const weekendBox  = $('weekend');
-  const catGallery  = $('catGallery');
-  const clockBtn    = $('clockBtn');
-  const picker      = $('picker');
-  const colH        = $('colH');
-  const colM        = $('colM');
-  const preview     = $('pickerPreview');
-  const okBtn       = $('okBtn');
-  const nowBtn      = $('nowBtn');
-  const confetti    = $('confetti');
+  const entrada    = $('entrada');
+  const calcBtn    = $('calcBtn');
+  const warn       = $('warn');
+  const resultBox  = $('result');
+  const resultText = $('resultText');
+  const catImg     = $('catImg');
+  const weekendBox = $('weekend');
+  const catGallery = $('catGallery');
+  const clockBtn   = $('clockBtn');
+  const picker     = $('picker');
+  const colH       = $('colH');
+  const colM       = $('colM');
+  const preview    = $('pickerPreview');
+  const okBtn      = $('okBtn');
+  const nowBtn     = $('nowBtn');
+  const confetti   = $('confetti');
+  const hint       = $('hint');
+  const testStatus = $('testStatus');
 
   const pad = (n) => String(n).padStart(2, '0');
 
-  /* ====================== PARSER DE HORÁRIO ====================== */
-  // Aceita: "09:30", "9:30", "0930", "930"
-  // Retorna minutos desde 00:00, ou null se inválido.
+  const DAY_NAMES = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+
+  /* =========================================================
+     SIMULADOR DE DIA  (apenas para esta versão de teste)
+     testDay = null  -> usa a data real
+     testDay = 0..6  -> força o dia da semana
+     ========================================================= */
+  let testDay = null;
+
+  function getDay() {
+    return testDay === null ? new Date().getDay() : testDay;
+  }
+
+  function isWeekend(day) { return day === 0 || day === 6; }
+
+  /* ---------- Parser ---------- */
   function parseTime(raw) {
     if (!raw) return null;
     const m = String(raw).trim().match(/^(\d{1,2}):?(\d{2})$/);
     if (!m) return null;
-
     const h  = parseInt(m[1], 10);
     const mi = parseInt(m[2], 10);
     if (h > 23 || mi > 59) return null;
-
     return h * 60 + mi;
   }
 
   const toHHMM = (mins) => pad(Math.floor(mins / 60)) + ':' + pad(mins % 60);
 
-  /* ====================== ESTADO DO FORMULÁRIO ====================== */
-  function hideResult() {
+  const WORK_NORMAL = 8 * 60 + 45;
+  const WORK_FRIDAY = 5 * 60;
+  const LUNCH       = 60;
+
+  /* ---------- Hint dinâmico ---------- */
+  function buildHint() {
+    const now = new Date();
+    const day = getDay();
+    const isFriday = day === 5;
+    const work = isFriday ? WORK_FRIDAY : WORK_NORMAL;
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const exit = (nowMin + work + LUNCH) % (24 * 60);
+    const exitStr = toHHMM(exit);
+    const workStr = isFriday ? '05:00' : '08:45';
+
+    hint.innerHTML =
+      'Se você entrou agora, você tem que trabalhar <b>' + workStr + '</b> e almoçar <b>01:00</b>, ' +
+      'então sua saída é <b>' + exitStr + '</b>, se não, coloca um horário na barrinha em cima ' +
+      'em HH:MM ou HHMM, ou selecione pelo botão do lado da caixinha!';
+  }
+
+  /* ---------- Estado ---------- */
+  function hideResults() {
     resultBox.hidden = true;
     resultBox.classList.remove('friday');
     weekendBox.hidden = true;
@@ -560,15 +701,12 @@
   function updateState() {
     const t = parseTime(entrada.value);
     const valid = t !== null;
-
     calcBtn.disabled = !valid;
-
-    // Aviso: entrada depois das 11:00
-    warn.hidden = !(valid && t > 11 * 60);
+    warn.hidden = !(valid && t > 11 * 60) || isWeekend(getDay());
   }
 
   entrada.addEventListener('input', function () {
-    hideResult();
+    hideResults();
     updateState();
   });
 
@@ -579,23 +717,13 @@
     }
   });
 
-  /* ====================== CÁLCULO ====================== */
-  const WORK_NORMAL = 8 * 60 + 45;  // 08:45
-  const WORK_FRIDAY = 5 * 60;       // 05:00
-  const LUNCH       = 60;           // 01:00
-
-  function isWeekend(day) {
-    return day === 0 || day === 6; // 0 = domingo, 6 = sábado
-  }
-
-  calcBtn.addEventListener('click', function () {
+  /* ---------- Cálculo (isolado para poder ser chamado pelo simulador) ---------- */
+  function runCalc() {
     const entry = parseTime(entrada.value);
     if (entry === null) return;
 
-    const today = new Date();
-    const day = today.getDay();
+    const day = getDay();
 
-    // Sábado ou domingo: não calcula, mostra a galeria de gatos.
     if (isWeekend(day)) {
       resultBox.hidden = true;
       resultBox.classList.remove('friday');
@@ -604,16 +732,17 @@
       return;
     }
 
-    const isFriday = day === 5; // 5 = sexta-feira
-    const work  = isFriday ? WORK_FRIDAY : WORK_NORMAL;
-    const exit  = (entry + work + LUNCH) % (24 * 60);
+    const isFriday = day === 5;
+    const work = isFriday ? WORK_FRIDAY : WORK_NORMAL;
+    const exit = (entry + work + LUNCH) % (24 * 60);
     const exitStr = toHHMM(exit);
 
     if (isFriday) {
       resultText.innerHTML =
         'Hoje é sexta! Trabalhando <b>05:00</b> e almoçando por uma hora, ' +
-        'você deve dizer que o Galiza é maravilho <b>' + exitStr + '</b> hoje! ' +
-        '<span>Sextou! 💙💖🎉✨</span>';
+        'você deve sair <b>' + exitStr + '</b> hoje! ' +
+        '<b>Diga pro Galiza que ele é lindo!</b> ' +
+        'Sextou! 💙💖🎉✨';
     } else {
       resultText.innerHTML =
         'Trabalhando <b>08:45</b> e almoçando por uma hora, você deve sair ' +
@@ -630,9 +759,11 @@
     if (resultBox.getBoundingClientRect().bottom > window.innerHeight) {
       resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-  });
+  }
 
-  /* ====================== GATO ALEATÓRIO (RESULTADO NORMAL) ====================== */
+  calcBtn.addEventListener('click', runCalc);
+
+  /* ---------- Gato do card principal ---------- */
   function loadCat() {
     const seed = Date.now() + '-' + Math.floor(Math.random() * 1e6);
 
@@ -662,12 +793,12 @@
     catImg.src = sources[0];
   }
 
-  /* ====================== GALERIA 12x12 (FIM DE SEMANA) ====================== */
+  /* ---------- Galeria 12x12 ---------- */
   function buildCatGallery() {
     catGallery.innerHTML = '';
 
     const fragment = document.createDocumentFragment();
-    const total = 12 * 12; // 144 gatos
+    const total = 12 * 12;
 
     for (let i = 0; i < total; i++) {
       const img = document.createElement('img');
@@ -710,7 +841,7 @@
     }
   }
 
-  /* ====================== CELEBRAÇÃO (SEXTA) ====================== */
+  /* ---------- Confetes de sexta ---------- */
   function celebrate() {
     const emojis = ['💙', '💖', '✨', '🎉', '🩵', '💫'];
 
@@ -728,7 +859,7 @@
     }
   }
 
-  /* ====================== PICKER DE HORÁRIO ====================== */
+  /* ---------- Picker de horário ---------- */
   let selH = 8;
   let selM = 0;
 
@@ -832,14 +963,75 @@
   okBtn.addEventListener('click', function () {
     entrada.value = pad(selH) + ':' + pad(selM);
     closePicker();
-    hideResult();
+    hideResults();
     updateState();
     entrada.focus();
   });
 
-  /* ====================== INICIALIZAÇÃO ====================== */
-  syncPicker(false);
-  updateState();
+  /* =========================================================
+     SIMULADOR DE DIA — lógica da barra de teste
+     ========================================================= */
+  const dayButtons = Array.prototype.slice.call(document.querySelectorAll('.tb-btn'));
+
+  function updateTestStatus() {
+    testStatus.classList.remove('weekend', 'friday');
+
+    if (testDay === null) {
+      testStatus.textContent = 'dia real: ' + DAY_NAMES[new Date().getDay()];
+      const d = new Date().getDay();
+      if (isWeekend(d)) testStatus.classList.add('weekend');
+      else if (d === 5) testStatus.classList.add('friday');
+      return;
+    }
+
+    testStatus.textContent = 'simulando: ' + DAY_NAMES[testDay];
+    if (isWeekend(testDay)) testStatus.classList.add('weekend');
+    else if (testDay === 5) testStatus.classList.add('friday');
+  }
+
+  function applyTestDay() {
+    dayButtons.forEach(function (btn) {
+      const v = btn.dataset.day;
+      const active = (v === 'auto' && testDay === null) ||
+                     (v !== 'auto' && Number(v) === testDay);
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    updateTestStatus();
+    buildHint();
+    updateState();
+
+    // Se já existe um horário válido, recalcula na hora para o preview ficar correto
+    if (parseTime(entrada.value) !== null) {
+      runCalc();
+    } else {
+      hideResults();
+    }
+  }
+
+  dayButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const v = btn.dataset.day;
+      testDay = (v === 'auto') ? null : Number(v);
+      applyTestDay();
+    });
+  });
+
+  /* ---------- Inicialização ---------- */
+  (function init() {
+    const now = new Date();
+    entrada.value = pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+    buildHint();
+    updateState();
+    loadCat();
+    syncPicker(false);
+    updateTestStatus();
+
+    // Ao abrir, se o dia real for fim de semana, já mostra a galeria
+    if (isWeekend(getDay())) showWeekendGallery();
+  })();
 })();
 </script>
 </body>
