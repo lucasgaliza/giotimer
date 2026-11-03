@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0e1116" />
+<title>Calculadora de Saída · Giovanna</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+
+  :root{
+    --bg:#0e1116;
+    --surface:#171c23;
+    --surface-2:#1d242d;
+    --border:#2a333f;
+    --text:#e7ecf4;
+    --muted:#8f9cb0;
+    --blue:#4d6bfe;
+    --blue-soft:#8ea8ff;
+    --gold:#ffc46b;
+    --pink:#ff7ab8;
+  }
+
+  html{ -webkit-text-size-adjust:100%; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    padding:clamp(14px,4vw,44px);
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    color:var(--text);
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(900px 520px at 8% -12%, rgba(77,107,254,.20), transparent 62%),
+      radial-gradient(760px 480px at 108% 112%, rgba(77,107,254,.13), transparent 58%);
+    background-repeat:no-repeat;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- CARD ---------- */
+  .card{
+    margin:auto;
+    width:min(620px,100%);
+    padding:clamp(20px,5.2vw,34px);
+    border:1px solid var(--border);
+    border-radius:22px;
+    background:linear-gradient(180deg, rgba(29,36,45,.96), rgba(21,26,33,.97));
+    box-shadow:
+      0 40px 80px -40px rgba(0,0,0,.95),
+      0 0 0 1px rgba(255,255,255,.02) inset,
+      0 1px 0 rgba(255,255,255,.05) inset;
+    animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both;
+  }
+
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(14px) scale(.985); }
+    to{ opacity:1; transform:none; }
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--blue-soft);
+    background:rgba(77,107,254,.10);
+    border:1px solid rgba(77,107,254,.22);
+    padding:5px 11px;
+    border-radius:999px;
+    margin-bottom:16px;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--blue);
+    box-shadow:0 0 10px var(--blue);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 50%{ opacity:.35; } }
+
+  h1{
+    margin:0 0 8px;
+    font-family:'Sora','Inter',sans-serif;
+    font-weight:700;
+    font-size:clamp(1.45rem,5.4vw,2rem);
+    line-height:1.18;
+    letter-spacing:-.02em;
+    background:linear-gradient(100deg,#ffffff 0%,#cdd9ff 45%,#6f8cff 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .sub{
+    margin:0 0 24px;
+    font-size:14.5px;
+    line-height:1.5;
+    color:var(--muted);
+  }
+
+  /* ---------- INPUT + RELÓGIO ---------- */
+  .timewrap{ position:relative; display:flex; align-items:center; }
+
+  #entrada{
+    width:100%;
+    padding:15px 58px 15px 16px;
+    font-family:inherit;
+    font-size:16px;
+    color:var(--text);
+    background:#121820;
+    border:1px solid var(--border);
+    border-radius:14px;
+    transition:border-color .18s, box-shadow .18s, background .18s;
+  }
+  #entrada::placeholder{ color:#5d6a7d; font-size:14.5px; }
+  #entrada:hover{ border-color:#35404e; }
+  #entrada:focus{
+    outline:none;
+    background:#141b24;
+    border-color:var(--blue);
+    box-shadow:0 0 0 4px rgba(77,107,254,.16);
+  }
+
+  .clock-btn{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    width:40px;height:40px;
+    display:grid;place-items:center;
+    border-radius:11px;
+    border:1px solid rgba(77,107,254,.28);
+    background:rgba(77,107,254,.13);
+    color:var(--blue-soft);
+    cursor:pointer;
+    transition:background .18s, color .18s, border-color .18s, transform .12s;
+  }
+  .clock-btn:hover{ background:rgba(77,107,254,.26); color:#d5e0ff; }
+  .clock-btn:active{ transform:translateY(-50%) scale(.94); }
+  .clock-btn.active{
+    background:rgba(77,107,254,.34);
+    color:#fff;
+    border-color:rgba(77,107,254,.7);
+  }
+  .clock-btn svg{ width:19px;height:19px; }
+
+  /* ---------- PICKER ---------- */
+  .picker{
+    position:absolute;
+    z-index:30;
+    top:calc(100% + 10px);
+    right:0;
+    width:min(268px,100%);
+    padding:13px;
+    background:#1a2029;
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 28px 60px -22px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.04) inset;
+    animation:pop .16s ease both;
+  }
+  .picker[hidden]{ display:none; }
+  @keyframes pop{ from{ opacity:0; transform:translateY(-6px) scale(.97); } }
+
+  .picker-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:10px;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .picker-head strong{
+    font-size:20px;
+    letter-spacing:0;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .picker-cols{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+  .col{
+    position:relative;
+    height:170px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding-right:4px;
+    scrollbar-width:thin;
+    scrollbar-color:#33404f transparent;
+    overscroll-behavior:contain;
+  }
+  .col::-webkit-scrollbar{ width:6px; }
+  .col::-webkit-scrollbar-thumb{ background:#33404f; border-radius:99px; }
+  .col::-webkit-scrollbar-track{ background:transparent; }
+
+  .opt{
+    flex:0 0 auto;
+    padding:7px 4px;
+    font-family:inherit;
+    font-size:14px;
+    font-variant-numeric:tabular-nums;
+    color:var(--muted);
+    background:transparent;
+    border:1px solid transparent;
+    border-radius:9px;
+    cursor:pointer;
+    transition:background .14s, color .14s, border-color .14s;
+  }
+  .opt:hover{ background:#232b36; color:var(--text); }
+  .opt.active{
+    background:rgba(77,107,254,.20);
+    border-color:rgba(77,107,254,.5);
+    color:#d5e0ff;
+    font-weight:600;
+  }
+
+  .picker-actions{ display:flex; gap:8px; margin-top:12px; }
+  .picker-actions button{
+    flex:1;
+    padding:9px 10px;
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--muted);
+    background:#20272f;
+    border:1px solid var(--border);
+    border-radius:10px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .picker-actions button:hover{ color:var(--text); border-color:#3a4655; }
+  #okBtn{
+    color:#fff;
+    background:linear-gradient(180deg,#5a7cff,#4059e8);
+    border-color:transparent;
+    box-shadow:0 8px 18px -10px rgba(77,107,254,.9);
+  }
+  #okBtn:hover{ filter:brightness(1.08); }
+
+  /* ---------- BOTÃO PRINCIPAL ---------- */
+  .primary-btn{
+    width:100%;
+    margin-top:14px;
+    padding:15px 18px;
+    font-family:inherit;
+    font-size:15.5px;
+    font-weight:600;
+    letter-spacing:.01em;
+    color:#fff;
+    background:linear-gradient(180deg,#5a7cff,#4059e8);
+    border:0;
+    border-radius:14px;
+    cursor:pointer;
+    box-shadow:0 14px 30px -14px rgba(77,107,254,.95), 0 1px 0 rgba(255,255,255,.18) inset;
+    transition:filter .18s, transform .12s, box-shadow .18s, background .18s, color .18s;
+  }
+  .primary-btn:not(:disabled):hover{ filter:brightness(1.09); }
+  .primary-btn:not(:disabled):active{ transform:translateY(1px) scale(.995); }
+  .primary-btn:disabled{
+    background:#20272f;
+    color:#5d6a7d;
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+
+  /* ---------- AVISO ---------- */
+  .warn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:12px 2px 0;
+    font-size:14px;
+    font-weight:500;
+    color:var(--gold);
+    animation:pop .2s ease both;
+  }
+  .warn[hidden]{ display:none; }
+
+  /* ---------- RESULTADO ---------- */
+  .result{
+    margin-top:20px;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:rgba(77,107,254,.07);
+    animation:pop .3s ease both;
+  }
+  .result[hidden]{ display:none; }
+  .result.friday{
+    border-color:rgba(255,196,107,.34);
+    background:rgba(255,196,107,.06);
+    box-shadow:0 0 40px -18px rgba(255,196,107,.55);
+  }
+
+  .result p{
+    margin:0 0 16px;
+    font-size:15.5px;
+    line-height:1.6;
+    color:#dbe3f0;
+  }
+  .result b{
+    color:#ffffff;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .result.friday b{ color:var(--gold); }
+
+  /* ---------- QUADRO DO GATO ---------- */
+  .frame{
+    padding:10px;
+    border-radius:14px;
+    background:linear-gradient(150deg,#3b4553 0%,#232a33 48%,#161b22 100%);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.07) inset,
+      0 0 0 1px rgba(0,0,0,.6),
+      0 18px 38px -22px rgba(0,0,0,.95);
+  }
+  .frame img{
+    display:block;
+    width:100%;
+    aspect-ratio:4 / 3;
+    object-fit:cover;
+    object-position:center;
+    border-radius:6px;
+    background:#0d1015;
+    box-shadow:0 0 0 1px rgba(0,0,0,.65), 0 2px 10px rgba(0,0,0,.5) inset;
+  }
+  .frame img.loading{ opacity:.35; transition:opacity .25s; }
+
+  /* ---------- FIM DE SEMANA ---------- */
+  .weekend{
+    margin-top:20px;
+    padding:18px;
+    border:1px solid rgba(255,122,184,.30);
+    border-radius:18px;
+    background:
+      radial-gradient(500px 220px at 0% 0%, rgba(255,122,184,.14), transparent 65%),
+      radial-gradient(500px 220px at 100% 100%, rgba(77,107,254,.12), transparent 65%),
+      rgba(255,122,184,.035);
+    animation:pop .3s ease both;
+    box-shadow:0 0 50px -24px rgba(255,122,184,.55);
+  }
+  .weekend[hidden]{ display:none; }
+
+  .weekend h2{
+    margin:0 0 8px;
+    font-family:'Sora','Inter',sans-serif;
+    font-size:clamp(1.35rem,4.8vw,1.85rem);
+    line-height:1.2;
+    letter-spacing:-.02em;
+    text-align:center;
+    background:linear-gradient(100deg,#ffffff 0%,#ffb3d6 45%,#8ea8ff 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .weekend .weekend-sub{
+    margin:0 0 14px;
+    font-size:14.5px;
+    line-height:1.55;
+    text-align:center;
+    color:#d4dcea;
+  }
+
+  .weekend .weekend-note{
+    margin:0 0 14px;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--muted);
+  }
+
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:clamp(2px,.55vw,5px);
+    padding:8px;
+    border-radius:14px;
+    background:rgba(0,0,0,.20);
+    box-shadow:0 0 0 1px rgba(255,255,255,.06) inset;
+  }
+
+  .gallery img{
+    display:block;
+    width:100%;
+    min-width:0;
+    aspect-ratio:1 / 1;
+    object-fit:cover;
+    border-radius:4px;
+    background:#0d1015;
+    border:1px solid rgba(255,255,255,.07);
+    box-shadow:0 2px 6px rgba(0,0,0,.35);
+  }
+
+  /* ---------- CONFETES ---------- */
+  .confetti-layer{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:60;
+  }
+  .confetti-piece{
+    position:absolute;
+    bottom:-50px;
+    animation-name:rise;
+    animation-timing-function:ease-out;
+    animation-fill-mode:forwards;
+    will-change:transform,opacity;
+  }
+  @keyframes rise{
+    0%{ transform:translateY(0) rotate(0deg) scale(.8); opacity:0; }
+    12%{ opacity:1; }
+    100%{ transform:translateY(-115vh) rotate(340deg) scale(1.1); opacity:0; }
+  }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:420px){
+    .picker{ width:100%; right:0; left:0; }
+    .col{ height:150px; }
+    .result p{ font-size:15px; }
+    .gallery{ gap:2px; padding:5px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="card">
+    <span class="eyebrow"><span class="dot"></span> Ponto &amp; Saída</span>
+
+    <h1>Olá, bela dama Giovanna!</h1>
+    <p class="sub">Me diga que horas você entrou hoje e eu calculo certinho o horário de ir embora. 💙</p>
+
+    <div class="timewrap">
+      <input
+        id="entrada"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Horário de entrada"
+        placeholder="que horas você entrou hoje? no formato HH:MM, HHMM também serve..."
+      />
+
+      <button id="clockBtn" class="clock-btn" type="button"
+              aria-label="Escolher horário no relógio" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 7.2V12l3.3 2"></path>
+        </svg>
+      </button>
+
+      <div id="picker" class="picker" hidden role="dialog" aria-label="Seletor de horário">
+        <div class="picker-head">
+          <span>Horário</span>
+          <strong id="pickerPreview">08:00</strong>
+        </div>
+        <div class="picker-cols">
+          <div class="col" id="colH" aria-label="Horas"></div>
+          <div class="col" id="colM" aria-label="Minutos"></div>
+        </div>
+        <div class="picker-actions">
+          <button type="button" id="nowBtn">Agora</button>
+          <button type="button" id="okBtn">Usar</button>
+        </div>
+      </div>
+    </div>
+
+    <button id="calcBtn" class="primary-btn" type="button" disabled>Calcular Saída</button>
+
+    <p id="warn" class="warn" hidden>⏰ Eita, entrou tarde hein?</p>
+
+    <section id="result" class="result" hidden aria-live="polite">
+      <p id="resultText"></p>
+      <div class="frame">
+        <img id="catImg" alt="Gato aleatório fofo" />
+      </div>
+    </section>
+
+    <section id="weekend" class="weekend" hidden aria-live="polite">
+      <h2>Final de semana não, porra!</h2>
+      <p class="weekend-sub">Hoje é dia de descansar, Giovanna. Mas olha só essa galeria de gatos pra alegrar o dia. 🐾💙</p>
+      <p class="weekend-note">Galeria 12 × 12 de gatos aleatórios</p>
+      <div id="catGallery" class="gallery" aria-label="Galeria 12 por 12 de gatos aleatórios"></div>
+    </section>
+  </main>
+
+  <div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ====================== ELEMENTOS ====================== */
+  const $ = (id) => document.getElementById(id);
+
+  const entrada     = $('entrada');
+  const calcBtn     = $('calcBtn');
+  const warn        = $('warn');
+  const resultBox   = $('result');
+  const resultText  = $('resultText');
+  const catImg      = $('catImg');
+  const weekendBox  = $('weekend');
+  const catGallery  = $('catGallery');
+  const clockBtn    = $('clockBtn');
+  const picker      = $('picker');
+  const colH        = $('colH');
+  const colM        = $('colM');
+  const preview     = $('pickerPreview');
+  const okBtn       = $('okBtn');
+  const nowBtn      = $('nowBtn');
+  const confetti    = $('confetti');
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  /* ====================== PARSER DE HORÁRIO ====================== */
+  // Aceita: "09:30", "9:30", "0930", "930"
+  // Retorna minutos desde 00:00, ou null se inválido.
+  function parseTime(raw) {
+    if (!raw) return null;
+    const m = String(raw).trim().match(/^(\d{1,2}):?(\d{2})$/);
+    if (!m) return null;
+
+    const h  = parseInt(m[1], 10);
+    const mi = parseInt(m[2], 10);
+    if (h > 23 || mi > 59) return null;
+
+    return h * 60 + mi;
+  }
+
+  const toHHMM = (mins) => pad(Math.floor(mins / 60)) + ':' + pad(mins % 60);
+
+  /* ====================== ESTADO DO FORMULÁRIO ====================== */
+  function hideResult() {
+    resultBox.hidden = true;
+    resultBox.classList.remove('friday');
+    weekendBox.hidden = true;
+  }
+
+  function updateState() {
+    const t = parseTime(entrada.value);
+    const valid = t !== null;
+
+    calcBtn.disabled = !valid;
+
+    // Aviso: entrada depois das 11:00
+    warn.hidden = !(valid && t > 11 * 60);
+  }
+
+  entrada.addEventListener('input', function () {
+    hideResult();
+    updateState();
+  });
+
+  entrada.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !calcBtn.disabled) {
+      e.preventDefault();
+      calcBtn.click();
+    }
+  });
+
+  /* ====================== CÁLCULO ====================== */
+  const WORK_NORMAL = 8 * 60 + 45;  // 08:45
+  const WORK_FRIDAY = 5 * 60;       // 05:00
+  const LUNCH       = 60;           // 01:00
+
+  function isWeekend(day) {
+    return day === 0 || day === 6; // 0 = domingo, 6 = sábado
+  }
+
+  calcBtn.addEventListener('click', function () {
+    const entry = parseTime(entrada.value);
+    if (entry === null) return;
+
+    const today = new Date();
+    const day = today.getDay();
+
+    // Sábado ou domingo: não calcula, mostra a galeria de gatos.
+    if (isWeekend(day)) {
+      resultBox.hidden = true;
+      resultBox.classList.remove('friday');
+      warn.hidden = true;
+      showWeekendGallery();
+      return;
+    }
+
+    const isFriday = day === 5; // 5 = sexta-feira
+    const work  = isFriday ? WORK_FRIDAY : WORK_NORMAL;
+    const exit  = (entry + work + LUNCH) % (24 * 60);
+    const exitStr = toHHMM(exit);
+
+    if (isFriday) {
+      resultText.innerHTML =
+        'Hoje é sexta! Trabalhando <b>05:00</b> e almoçando por uma hora, ' +
+        'você deve dizer que o Galiza é maravilho <b>' + exitStr + '</b> hoje! ' +
+        '<span>Sextou! 💙💖🎉✨</span>';
+    } else {
+      resultText.innerHTML =
+        'Trabalhando <b>08:45</b> e almoçando por uma hora, você deve sair ' +
+        '<b>' + exitStr + '</b> hoje!';
+    }
+
+    weekendBox.hidden = true;
+    resultBox.classList.toggle('friday', isFriday);
+    resultBox.hidden = false;
+
+    loadCat();
+    if (isFriday) celebrate();
+
+    if (resultBox.getBoundingClientRect().bottom > window.innerHeight) {
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+
+  /* ====================== GATO ALEATÓRIO (RESULTADO NORMAL) ====================== */
+  function loadCat() {
+    const seed = Date.now() + '-' + Math.floor(Math.random() * 1e6);
+
+    const sources = [
+      'https://placecats.com/600/450?_=' + seed,
+      'https://cataas.com/cat?width=600&height=450&_=' + seed,
+      'https://loremflickr.com/600/450/cat?lock=' + Math.floor(Math.random() * 100000)
+    ];
+
+    let i = 0;
+    catImg.classList.add('loading');
+
+    catImg.onload = function () {
+      catImg.classList.remove('loading');
+    };
+
+    catImg.onerror = function () {
+      i++;
+      if (i < sources.length) {
+        catImg.src = sources[i];
+      } else {
+        catImg.onerror = null;
+        catImg.classList.remove('loading');
+      }
+    };
+
+    catImg.src = sources[0];
+  }
+
+  /* ====================== GALERIA 12x12 (FIM DE SEMANA) ====================== */
+  function buildCatGallery() {
+    catGallery.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+    const total = 12 * 12; // 144 gatos
+
+    for (let i = 0; i < total; i++) {
+      const img = document.createElement('img');
+      const unique = Date.now() + '-' + i + '-' + Math.random().toString(36).slice(2);
+
+      img.alt = 'Gato aleatório ' + (i + 1);
+      img.loading = 'lazy';
+      img.decoding = 'async';
+
+      const sources = [
+        'https://placecats.com/200/200?_=' + unique,
+        'https://cataas.com/cat?width=200&height=200&_=' + unique,
+        'https://loremflickr.com/200/200/cat?lock=' + Math.floor(Math.random() * 1000000)
+      ];
+
+      let sourceIndex = 0;
+      img.src = sources[sourceIndex];
+
+      img.onerror = function () {
+        sourceIndex++;
+        if (sourceIndex < sources.length) {
+          img.src = sources[sourceIndex];
+        } else {
+          img.onerror = null;
+        }
+      };
+
+      fragment.appendChild(img);
+    }
+
+    catGallery.appendChild(fragment);
+  }
+
+  function showWeekendGallery() {
+    buildCatGallery();
+    weekendBox.hidden = false;
+
+    if (weekendBox.getBoundingClientRect().bottom > window.innerHeight) {
+      weekendBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  /* ====================== CELEBRAÇÃO (SEXTA) ====================== */
+  function celebrate() {
+    const emojis = ['💙', '💖', '✨', '🎉', '🩵', '💫'];
+
+    for (let i = 0; i < 26; i++) {
+      const piece = document.createElement('span');
+      piece.className = 'confetti-piece';
+      piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      piece.style.left = (Math.random() * 100) + '%';
+      piece.style.fontSize = (14 + Math.random() * 22) + 'px';
+      piece.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's';
+      piece.style.animationDuration = (2.2 + Math.random() * 1.6).toFixed(2) + 's';
+
+      confetti.appendChild(piece);
+      setTimeout(function () { piece.remove(); }, 4600);
+    }
+  }
+
+  /* ====================== PICKER DE HORÁRIO ====================== */
+  let selH = 8;
+  let selM = 0;
+
+  (function buildPicker() {
+    for (let h = 0; h < 24; h++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.dataset.v = String(h);
+      b.textContent = pad(h);
+      b.addEventListener('click', function () { selH = h; syncPicker(false); });
+      colH.appendChild(b);
+    }
+
+    for (let m = 0; m < 60; m++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.dataset.v = String(m);
+      b.textContent = pad(m);
+      b.addEventListener('click', function () { selM = m; syncPicker(false); });
+      colM.appendChild(b);
+    }
+  })();
+
+  function centerInCol(col) {
+    const active = col.querySelector('.opt.active');
+    if (!active) return;
+    col.scrollTop = active.offsetTop - col.clientHeight / 2 + active.offsetHeight / 2;
+  }
+
+  function syncPicker(center) {
+    Array.prototype.forEach.call(colH.children, function (b) {
+      b.classList.toggle('active', Number(b.dataset.v) === selH);
+    });
+    Array.prototype.forEach.call(colM.children, function (b) {
+      b.classList.toggle('active', Number(b.dataset.v) === selM);
+    });
+
+    preview.textContent = pad(selH) + ':' + pad(selM);
+
+    if (center) {
+      centerInCol(colH);
+      centerInCol(colM);
+    }
+  }
+
+  function openPicker() {
+    const t = parseTime(entrada.value);
+
+    if (t !== null) {
+      selH = Math.floor(t / 60);
+      selM = t % 60;
+    } else {
+      const d = new Date();
+      selH = d.getHours();
+      selM = d.getMinutes();
+    }
+
+    syncPicker(false);
+    picker.hidden = false;
+    clockBtn.classList.add('active');
+    clockBtn.setAttribute('aria-expanded', 'true');
+
+    requestAnimationFrame(function () {
+      centerInCol(colH);
+      centerInCol(colM);
+    });
+  }
+
+  function closePicker() {
+    picker.hidden = true;
+    clockBtn.classList.remove('active');
+    clockBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  clockBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (picker.hidden) openPicker(); else closePicker();
+  });
+
+  picker.addEventListener('click', function (e) { e.stopPropagation(); });
+
+  document.addEventListener('click', function (e) {
+    if (picker.hidden) return;
+    if (picker.contains(e.target) || clockBtn.contains(e.target)) return;
+    closePicker();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closePicker();
+  });
+
+  nowBtn.addEventListener('click', function () {
+    const d = new Date();
+    selH = d.getHours();
+    selM = d.getMinutes();
+    syncPicker(true);
+  });
+
+  okBtn.addEventListener('click', function () {
+    entrada.value = pad(selH) + ':' + pad(selM);
+    closePicker();
+    hideResult();
+    updateState();
+    entrada.focus();
+  });
+
+  /* ====================== INICIALIZAÇÃO ====================== */
+  syncPicker(false);
+  updateState();
+})();
+</script>
+</body>
+</html>
